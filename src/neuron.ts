@@ -1,33 +1,36 @@
+import { sigmoid } from "./functions";
+
 export default class Neuron {
-	private inputs: Neuron[] | number;
+	private numInputs: number;
 	private weights: number[] = [];
 	private bias: number = 0;
+	private output: number = 0;
 
-	public constructor(inputs: Neuron[] | number) {
-		this.inputs = inputs;
+	public constructor(numInputs: number) {
+		this.numInputs = numInputs;
 	}
 
-	public setInput(input: number): void {
-		this.inputs = input;
+	public input(inputs: number[] | number): void {
+		if (typeof inputs === "number") {
+			this.output = inputs + this.bias;
+			return;
+		}
+		this.output = sigmoid(
+			inputs.reduce(
+				(acc: number, curr: number, i: number) => (acc + curr) * this.weights[i]
+			)
+		);
 	}
 
 	public randomize(): void {
-		if (typeof this.inputs !== "number")
-			this.weights = Array.from({ length: this.inputs.length }, () =>
-				Math.random()
-			);
-		this.bias = Math.random();
+		this.weights = Array.from(
+			{ length: this.numInputs },
+			() => Math.random() * 2 - 1
+		);
+		this.bias = Math.random() * 2 - 1;
 	}
 
-	public output(): number {
-		if (typeof this.inputs === "number") return this.inputs + this.bias;
-		return (
-			this.inputs
-				.map((neuron: Neuron) => neuron.output())
-				.reduce(
-					(acc: number, curr: number, i: number) =>
-						(acc + curr) * this.weights[i]
-				) + this.bias
-		);
+	public getOutput(): number {
+		return this.output;
 	}
 }

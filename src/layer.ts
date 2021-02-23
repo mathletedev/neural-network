@@ -3,12 +3,9 @@ import Neuron from "./neuron";
 export default class Layer {
 	private neurons: Neuron[] = [];
 
-	public constructor(inputs: Neuron[] | null, size: number) {
-		for (let i = 0; i < size; i++) {
-			let neuron: Neuron;
-			if (inputs === null) neuron = new Neuron(0);
-			else neuron = new Neuron(inputs);
-
+	public constructor(size: number, prevSize: number) {
+		for (let i: number = 0; i < size; i++) {
+			let neuron: Neuron = new Neuron(prevSize);
 			neuron.randomize();
 			this.neurons.push(neuron);
 		}
@@ -20,11 +17,15 @@ export default class Layer {
 
 	public input(inputs: number[]): void {
 		this.neurons.forEach((neuron: Neuron, i: number) =>
-			neuron.setInput(inputs[i])
+			neuron.input(inputs[i])
 		);
 	}
 
+	public inputAll(inputs: number[]): void {
+		this.neurons.forEach((neuron: Neuron, i: number) => neuron.input(inputs));
+	}
+
 	public getOutputs(): number[] {
-		return this.neurons.map((neuron: Neuron) => neuron.output());
+		return this.neurons.map((neuron: Neuron) => neuron.getOutput());
 	}
 }
