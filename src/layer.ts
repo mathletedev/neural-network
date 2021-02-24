@@ -28,4 +28,10 @@ export default class Layer {
 	public getOutputs(): number[] {
 		return this.neurons.map((neuron: Neuron) => neuron.getOutput());
 	}
+
+	public setErrors(errors: number[]): void {
+		for (let i = 0; i < this.neurons.length; i++) {
+			this.neurons[i].setError(errors[i]);
+		}
+	}
 }
