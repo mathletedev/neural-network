@@ -28,6 +28,7 @@ export default class NeuralNetwork {
 	): void {
 		let outputs: number[] = this.predict(inputs);
 		if (data !== null) {
+			console.log(`${data} | Inputs: ${inputs}`);
 			console.log(`${data} | Outputs: ${outputs}`);
 			console.log(`${data} | Targets: ${targets}`);
 		}
